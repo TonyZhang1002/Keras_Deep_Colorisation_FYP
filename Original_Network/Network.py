@@ -11,7 +11,7 @@ from keras.layers.core import Activation
 from keras.layers.core import Dropout
 from keras.layers.normalization import BatchNormalization
 from keras.datasets import cifar10
-from keras.callbacks import EarlyStopping
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.backend.tensorflow_backend import set_session
 import tensorflow as tf
 
@@ -72,14 +72,28 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
             yield (x, y)
 
 
-# Train model
+# Trainning parameters
 Batch_size = 2
 img_W = 256
 img_H = 256
-Epochs = 1
+Epochs = 3
 Steps_per_epoch = 5
-# TODO: Val and Early Stop
-model.compile(optimizer='adam', loss='mse')
+EarlyStopping_patience = 2
+Trainning_dir = "/Users/zhangqinyuan/Downloads/images/"
+Validation_dir = "/Users/zhangqinyuan/Downloads/images/wallpaper"
+Models_filepath = "./Models/weights-original-network-{epoch:02d}-{val_acc:.2f}.hdf5"
+
+# Set the early stopping
+early_stopping = EarlyStopping(monitor='val_acc', patience=EarlyStopping_patience, mode='auto')
+
+# Set the checkpoint
+checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save_best_only=True,
+                             mode='max')
+
+# Start trainning
+model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 model.fit_generator(
-    get_train_batch(get_image_file_names("/Users/zhangqinyuan/Downloads/images/"), Batch_size, img_W, img_H),
-    epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1, workers=1)
+    generator=get_train_batch(get_image_file_names(Trainning_dir), Batch_size, img_W, img_H),
+    epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1, workers=1,
+    validation_data=get_train_batch(get_image_file_names(Validation_dir), Batch_size, img_W, img_H),
+    callbacks=[checkpoint, early_stopping], validation_steps=2)
