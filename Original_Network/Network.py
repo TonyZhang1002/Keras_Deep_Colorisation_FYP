@@ -3,23 +3,18 @@ import numpy as np
 import random
 
 from keras import Input, Model
-from keras.models import Sequential
-from keras.layers import UpSampling2D, InputLayer
+from keras.layers import UpSampling2D
 from keras.layers.convolutional import Conv2D
-from keras.layers.convolutional import MaxPooling2D, AveragePooling2D
-from keras.layers.core import Activation
-from keras.layers.core import Dropout
-from keras.layers.normalization import BatchNormalization
-from keras.datasets import cifar10
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.backend.tensorflow_backend import set_session
 import tensorflow as tf
+from keras_preprocessing.image import ImageDataGenerator
 
 from Datasets import get_image_file_names, get_im_cv2
 
 # For tensonflow-gpu
 # config = tf.ConfigProto(
-#     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
+#     gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
 #     # device_count = {'GPU': 1}
 # )
 # config.gpu_options.allow_growth = True
