@@ -3,27 +3,30 @@ import numpy as np
 import cv2
 
 
-def get_im_cv2(root_paths, img_rows, img_cols, color_type=1, normalize=True):
-    """
-    :param：
-        paths：The images' root path
-        img_rows: images' row you want
-        img_cols: images' col you want
-        color_type: images' output types ('L' or 'Lab')
-    返回:
-        imgs: numpy output
-    """
-    imgs = []
-
-    # Get all jpgs' files name
+def get_image_file_names(root_paths):
+    # Get all images' files name
     files_path = []
     for dirpath, dirnames, filenames in os.walk(root_paths):
         for file in filenames:
             if os.path.splitext(file)[1] == '.jpg':
                 files_path.append(os.path.join(dirpath, file))
+    return files_path
+
+
+def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True):
+    """
+    :parameter：
+        paths：The images' root path
+        img_rows: images' row you want
+        img_cols: images' col you want
+        color_type: images' output types ('L' or 'Lab')
+    :return:
+        imgs: numpy output
+    """
+    imgs = []
 
     # Read all images' and convert to Lab mode
-    for path in files_path:
+    for path in paths:
         print(path)
         img = cv2.imread(path)
         lab_img = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
@@ -42,7 +45,7 @@ def get_im_cv2(root_paths, img_rows, img_cols, color_type=1, normalize=True):
 
         imgs.append(target_img)
 
-    return np.array(imgs).reshape(len(files_path), img_rows, img_cols, color_type)
+    return np.array(imgs).reshape(len(paths), img_rows, img_cols, color_type)
 
 
 def get_train_batch(X_train, y_train, batch_size, img_w, img_h, color_type):
@@ -66,6 +69,8 @@ def get_train_batch(X_train, y_train, batch_size, img_w, img_h, color_type):
             yield ({'input': x}, {'output': y})
 
 
-get = get_im_cv2("/Users/zhangqinyuan/Downloads/images/", 256, 256, 3)
+get = get_im_cv2(get_image_file_names("/Users/zhangqinyuan/Downloads/images/")[0:2], 256, 256, 3)
 print(get.shape)
-print(get[4, 127, 127, 2])
+
+# files_path = get_image_file_names("/Users/zhangqinyuan/Downloads/images/")[0:2]
+# print(files_path)
