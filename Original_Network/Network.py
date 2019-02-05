@@ -13,13 +13,13 @@ from keras_preprocessing.image import ImageDataGenerator
 from Datasets import get_image_file_names, get_im_cv2
 
 # For tensonflow-gpu
-# config = tf.ConfigProto(
-#     gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
-#     # device_count = {'GPU': 1}
-# )
-# config.gpu_options.allow_growth = True
-# session = tf.Session(config=config)
-# set_session(session)
+config = tf.ConfigProto(
+     gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
+     # device_count = {'GPU': 1}
+)
+config.gpu_options.allow_growth = True
+session = tf.Session(config=config)
+set_session(session)
 
 
 # Encoder
@@ -30,7 +30,6 @@ encoder_output = Conv2D(128, (3, 3), activation='relu', padding='same', strides=
 encoder_output = Conv2D(256, (3, 3), activation='relu', padding='same')(encoder_output)
 encoder_output = Conv2D(256, (3, 3), activation='relu', padding='same', strides=2)(encoder_output)
 encoder_output = Conv2D(512, (3, 3), activation='relu', padding='same')(encoder_output)
-encoder_output = Conv2D(512, (3, 3), activation='relu', padding='same')(encoder_output)
 encoder_output = Conv2D(256, (3, 3), activation='relu', padding='same')(encoder_output)
 # Decoder
 decoder_output = Conv2D(128, (3, 3), activation='relu', padding='same')(encoder_output)
@@ -38,9 +37,9 @@ decoder_output = UpSampling2D((2, 2))(decoder_output)
 decoder_output = Conv2D(64, (3, 3), activation='relu', padding='same')(decoder_output)
 decoder_output = UpSampling2D((2, 2))(decoder_output)
 decoder_output = Conv2D(32, (3, 3), activation='relu', padding='same')(decoder_output)
+decoder_output = UpSampling2D((2, 2))(decoder_output)
 decoder_output = Conv2D(16, (3, 3), activation='relu', padding='same')(decoder_output)
 decoder_output = Conv2D(2, (3, 3), activation='tanh', padding='same')(decoder_output)
-decoder_output = UpSampling2D((2, 2))(decoder_output)
 model = Model(inputs=encoder_input, outputs=decoder_output)
 
 
@@ -68,14 +67,14 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
 
 
 # Trainning parameters
-Batch_size = 2
+Batch_size = 40
 img_W = 256
 img_H = 256
-Epochs = 3
-Steps_per_epoch = 5
+Epochs = 5
+Steps_per_epoch = 45086
 EarlyStopping_patience = 2
-Trainning_dir = "/Users/zhangqinyuan/Downloads/images/"
-Validation_dir = "/Users/zhangqinyuan/Downloads/images/wallpaper"
+Trainning_dir = "/media/tony/MyFiles/data_256"
+Validation_dir = "/media/tony/MyFiles/val_256"
 Models_filepath = "./Models/weights-original-network-{epoch:02d}-{val_acc:.2f}.hdf5"
 
 # Set the early stopping
@@ -89,6 +88,6 @@ checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save
 model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 model.fit_generator(
     generator=get_train_batch(get_image_file_names(Trainning_dir), Batch_size, img_W, img_H),
-    epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1, workers=1,
+    epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1,
     validation_data=get_train_batch(get_image_file_names(Validation_dir), Batch_size, img_W, img_H),
     callbacks=[checkpoint, early_stopping], validation_steps=2)

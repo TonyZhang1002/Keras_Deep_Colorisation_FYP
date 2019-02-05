@@ -68,8 +68,9 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True):
     return np.array(imgs).reshape(len(paths), img_rows, img_cols, color_type)
 
 
-# get = get_im_cv2(get_image_file_names("/Users/zhangqinyuan/Downloads/images/")[0:2], 256, 256, 3)
+# get = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:250], 256, 256, 3)
+# print(get.shape)
 # print(get[1, 211, 125, 2])
 
-# files_path = get_image_file_names("/Users/zhangqinyuan/Downloads/images/")
-# print(len(files_path))
+files_path = get_image_file_names("/media/tony/MyFiles/val_256")
+print(len(files_path))
