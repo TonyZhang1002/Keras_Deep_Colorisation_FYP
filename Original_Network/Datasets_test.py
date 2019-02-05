@@ -41,6 +41,7 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True):
         M1 = cv2.getRotationMatrix2D((img_cols / 2, img_rows / 2), 90, 1)
         M2 = cv2.getRotationMatrix2D((img_cols / 2, img_rows / 2), 180, 1)
         pre_processing_flag = random.randint(0, 3)
+        print(pre_processing_flag)
         pre_processed = img
         if pre_processing_flag == 1:
             pre_processed = cv2.warpAffine(img, M1, (img_cols, img_rows))
@@ -49,13 +50,16 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True):
         elif pre_processing_flag == 3:
             pre_processed = cv2.flip(img, -1)
 
-        # Switch to lab color space
-        lab_img = cv2.cvtColor(pre_processed, cv2.COLOR_BGR2LAB)
-
         # Reduce size
         if normalize:
-            lab_img = lab_img.astype('float32')
-            lab_img /= 256
+            pre_processed = pre_processed.astype('float32')
+            pre_processed /= 256
+
+        cv2.imshow('Test image', pre_processed)
+        cv2.waitKey(0)
+
+        # Switch to lab color space
+        lab_img = cv2.cvtColor(pre_processed, cv2.COLOR_BGR2LAB)
 
         # Judge different output requirements
         if color_type == 1:
@@ -68,9 +72,8 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True):
     return np.array(imgs).reshape(len(paths), img_rows, img_cols, color_type)
 
 
-# get = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:250], 256, 256, 3)
-# print(get.shape)
-# print(get[1, 211, 125, 2])
+get = get_im_cv2(get_image_file_names("/media/tony/Portable1/data_256")[6:7], 256, 256, 3)
+print(get[0, 125, 125, 2])
 
-# files_path = get_image_file_names("/media/tony/MyFiles/val_256")
+# files_path = get_image_file_names("/Users/zhangqinyuan/Downloads/images/")
 # print(len(files_path))
