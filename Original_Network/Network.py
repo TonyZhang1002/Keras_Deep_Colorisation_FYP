@@ -108,3 +108,4 @@ plt.ylabel("loss")
 plt.xlabel("epoch")
 plt.legend(["train","test"], loc="upper left")
 plt.savefig("Performance_Dilate.jpg")
+
