@@ -3,6 +3,7 @@ import random
 
 import numpy as np
 import cv2
+from keras.engine.saving import load_model
 
 
 def get_image_file_names(root_paths):
@@ -72,8 +73,9 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True):
     return np.array(imgs).reshape(len(paths), img_rows, img_cols, color_type)
 
 
-get = get_im_cv2(get_image_file_names("/media/tony/Portable1/data_256")[6:7], 256, 256, 3)
+get = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[6:7], 256, 256, 3)
 print(get[0, 125, 125, 2])
+
 
 # files_path = get_image_file_names("/Users/zhangqinyuan/Downloads/images/")
 # print(len(files_path))

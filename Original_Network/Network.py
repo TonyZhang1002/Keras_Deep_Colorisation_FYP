@@ -1,4 +1,6 @@
 # import the modules we need
+import os
+
 import numpy as np
 import random
 
@@ -11,6 +13,8 @@ import tensorflow as tf
 from keras_preprocessing.image import ImageDataGenerator
 
 from Datasets import get_image_file_names, get_im_cv2
+
+import matplotlib.pyplot as plt
 
 # For tensonflow-gpu
 config = tf.ConfigProto(
@@ -70,9 +74,9 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
 Batch_size = 40
 img_W = 256
 img_H = 256
-Epochs = 5
+Epochs = 6
 Steps_per_epoch = 45086
-EarlyStopping_patience = 2
+EarlyStopping_patience = 3
 Trainning_dir = "/media/tony/MyFiles/data_256"
 Validation_dir = "/media/tony/MyFiles/val_256"
 Models_filepath = "./Models/weights-original-network-{epoch:02d}-{val_acc:.2f}.hdf5"
@@ -81,13 +85,26 @@ Models_filepath = "./Models/weights-original-network-{epoch:02d}-{val_acc:.2f}.h
 early_stopping = EarlyStopping(monitor='val_acc', patience=EarlyStopping_patience, mode='auto')
 
 # Set the checkpoint
-checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save_best_only=True,
-                             mode='max')
+checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save_best_only=False)
+
+# Check if have any previous weight
+if os.path.exists("./Models/weights-original-network-01-0.44.hdf5"):
+    model.load_weights("./Models/weights-original-network-01-0.44.hdf5")
+    print("Check point loaded!")
 
 # Start trainning
 model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
-model.fit_generator(
+history = model.fit_generator(
     generator=get_train_batch(get_image_file_names(Trainning_dir), Batch_size, img_W, img_H),
     epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1,
     validation_data=get_train_batch(get_image_file_names(Validation_dir), Batch_size, img_W, img_H),
-    callbacks=[checkpoint, early_stopping], validation_steps=2)
+    callbacks=[checkpoint], validation_steps=2)
+
+# Summarize history for loss
+plt.plot(history.history["loss"])
+plt.plot(history.history["val_acc"])
+plt.title("Model loss")
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.legend(["train","test"], loc="upper left")
+plt.savefig("Performance_Dilate.jpg")
