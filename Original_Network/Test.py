@@ -24,7 +24,7 @@ session = tf.Session(config=config)
 set_session(session)
 
 # Load the model
-model = load_model('./Models/weights-original-network-01-0.44.hdf5')
+model = load_model('./Models/weights-original-network-04-0.48.hdf5')
 
 # Test parameters
 Testing_dir = "/media/tony/MyFiles/test_256"
