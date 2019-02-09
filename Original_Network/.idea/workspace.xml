@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3c1aab6-5cb1-4944-a28b-33e7dbe73175" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Resnet_Classification_Network/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Resnet_Classification_Network/Datasets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Resnet_Classification_Network/Embed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Resnet_Classification_Network/Network.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Original_Network.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Original_Network.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Resnet_Classification_Network/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Resnet_Classification_Network/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Resnet_Classification_Network/Network.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Resnet_Classification_Network/Network.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

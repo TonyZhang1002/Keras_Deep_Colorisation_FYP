@@ -17,6 +17,8 @@ from Datasets import get_image_file_names, get_im_cv2
 import matplotlib.pyplot as plt
 
 # For tensonflow-gpu
+from Embed import create_inception_embedding
+
 config = tf.ConfigProto(
      gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
      # device_count = {'GPU': 1}
@@ -69,12 +71,13 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
     while 1:
         for i in range(0, len(X_train), batch_size):
             images_input = get_im_cv2(X_train[i:i + batch_size], img_w, img_h, 3)
+            embed_input = create_inception_embedding(X_train[i:i + batch_size])
             x = images_input[:, :, :, 0]
             # Reshape the x
             x = x.reshape(x.shape + (1,))
             y = images_input[:, :, :, 1:]
             # Keep running to feed images
-            yield (x, y)
+            yield ([x, embed_input], y)
 
 
 # Trainning parameters

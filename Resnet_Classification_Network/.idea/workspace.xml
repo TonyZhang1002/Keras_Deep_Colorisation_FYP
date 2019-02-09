@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d7e6993a-35c7-4d62-b9d7-c0d7930e4134" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Datasets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Embed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Network.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Original_Network/.idea/Original_Network.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Original_Network/.idea/Original_Network.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Original_Network/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Original_Network/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Original_Network/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Original_Network/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Network.py" beforeDir="false" afterPath="$PROJECT_DIR$/Network.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,13 +36,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="8" />
-          <entry key="py" value="503" />
+          <entry key="py" value="522" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="8" />
-          <entry key="Python" value="503" />
+          <entry key="Python" value="522" />
         </counts>
       </usages-collector>
     </session>
@@ -66,11 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Embed.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="33">
-              <caret line="40" column="40" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
+            <state relative-caret-position="255">
+              <caret line="15" column="30" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="30" />
               <folding>
                 <element signature="e#15#25#0" expanded="true" />
               </folding>
@@ -78,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="76" column="20" selection-start-line="76" selection-start-column="20" selection-end-line="76" selection-end-column="20" />
+            <state relative-caret-position="340">
+              <caret line="79" column="35" selection-start-line="79" selection-start-column="35" selection-end-line="79" selection-end-column="35" />
               <folding>
                 <element signature="e#29#38#0" expanded="true" />
               </folding>
@@ -106,9 +101,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Test.py" />
-        <option value="$PROJECT_DIR$/Network.py" />
         <option value="$PROJECT_DIR$/Datasets.py" />
         <option value="$PROJECT_DIR$/Embed.py" />
+        <option value="$PROJECT_DIR$/Network.py" />
       </list>
     </option>
   </component>
@@ -235,7 +230,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24964234" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3748212" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
@@ -245,7 +240,7 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32899868" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32899868" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -274,22 +269,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Network.py">
+    <entry file="file://$PROJECT_DIR$/Embed.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="76" column="20" selection-start-line="76" selection-start-column="20" selection-end-line="76" selection-end-column="20" />
+        <state relative-caret-position="255">
+          <caret line="15" column="30" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="30" />
           <folding>
-            <element signature="e#29#38#0" expanded="true" />
+            <element signature="e#15#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Embed.py">
+    <entry file="file://$PROJECT_DIR$/Network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="33">
-          <caret line="40" column="40" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
+        <state relative-caret-position="340">
+          <caret line="79" column="35" selection-start-line="79" selection-start-column="35" selection-end-line="79" selection-end-column="35" />
           <folding>
-            <element signature="e#15#25#0" expanded="true" />
+            <element signature="e#29#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
