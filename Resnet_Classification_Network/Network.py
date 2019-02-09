@@ -15,10 +15,11 @@ from keras_preprocessing.image import ImageDataGenerator
 
 from Datasets import get_image_file_names, get_im_cv2
 
-import matplotlib.pyplot as plt
+
 
 # For tensonflow-gpu
 from Embed import create_inception_embedding
+from Plot import training_vis
 
 config = tf.ConfigProto(
      gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
@@ -87,16 +88,19 @@ img_W = 256
 img_H = 256
 Epochs = 6
 Steps_per_epoch = 45086
+Val_Steps_per_epoch = 912
 EarlyStopping_patience = 3
 Trainning_dir = "/media/tony/MyFiles/data_256"
 Validation_dir = "/media/tony/MyFiles/val_256"
 Models_filepath = "./Models/weights-original-network-{epoch:02d}-{val_acc:.2f}.hdf5"
+Trainning_file_names = get_image_file_names(Trainning_dir)
+Validation_file_names = get_image_file_names(Validation_dir)
 
 # Set the early stopping
 early_stopping = EarlyStopping(monitor='val_acc', patience=EarlyStopping_patience, mode='auto')
 
 # Set the checkpoint
-checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save_best_only=False)
+checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save_best_only=True)
 
 # Check if have any previous weight
 if os.path.exists("./Models/weights-original-network-01-0.44.hdf5"):
@@ -107,17 +111,10 @@ if os.path.exists("./Models/weights-original-network-01-0.44.hdf5"):
 model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 keras.backend.get_session().run(tf.global_variables_initializer())
 history = model.fit_generator(
-    generator=get_train_batch(get_image_file_names(Trainning_dir), Batch_size, img_W, img_H),
+    generator=get_train_batch(Trainning_file_names, Batch_size, img_W, img_H),
     epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1,
-    validation_data=get_train_batch(get_image_file_names(Validation_dir), Batch_size, img_W, img_H),
-    callbacks=[checkpoint], validation_steps=2)
+    validation_data=get_train_batch(Validation_file_names, Batch_size, img_W, img_H),
+    callbacks=[checkpoint, early_stopping], validation_steps=Val_Steps_per_epoch)
 
 # Summarize history for loss
-plt.plot(history.history["loss"])
-plt.plot(history.history["val_acc"])
-plt.title("Model loss")
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.legend(["train","test"], loc="upper left")
-plt.savefig("Performance_Dilate.jpg")
-
+training_vis(history)

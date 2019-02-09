@@ -76,10 +76,13 @@ img_W = 256
 img_H = 256
 Epochs = 6
 Steps_per_epoch = 45086
+Val_Steps_per_epoch = 912
 EarlyStopping_patience = 3
 Trainning_dir = "/media/tony/MyFiles/data_256"
 Validation_dir = "/media/tony/MyFiles/val_256"
 Models_filepath = "./Models/weights-original-network-{epoch:02d}-{val_acc:.2f}.hdf5"
+Trainning_file_names = get_image_file_names(Trainning_dir)
+Validation_file_names = get_image_file_names(Validation_dir)
 
 # Set the early stopping
 early_stopping = EarlyStopping(monitor='val_acc', patience=EarlyStopping_patience, mode='auto')
@@ -95,10 +98,10 @@ if os.path.exists("./Models/weights-original-network-01-0.44.hdf5"):
 # Start trainning
 model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 history = model.fit_generator(
-    generator=get_train_batch(get_image_file_names(Trainning_dir), Batch_size, img_W, img_H),
+    generator=get_train_batch(Trainning_file_names, Batch_size, img_W, img_H),
     epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1,
-    validation_data=get_train_batch(get_image_file_names(Validation_dir), Batch_size, img_W, img_H),
-    callbacks=[checkpoint], validation_steps=2)
+    validation_data=get_train_batch(Validation_file_names, Batch_size, img_W, img_H),
+    callbacks=[checkpoint], validation_steps=Val_Steps_per_epoch)
 
 # Summarize history for loss
 plt.plot(history.history["loss"])

@@ -1,4 +1,6 @@
 # Load weights
+import time
+
 import cv2
 import tensorflow as tf
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
@@ -60,6 +62,11 @@ def create_inception_embedding(paths):
     return embed
 
 
-# get = create_inception_embedding(get_image_file_names("/media/tony/MyFiles/data_256")[0:3])
+# val_names = get_image_file_names("/media/tony/MyFiles/data_256")
+# start = time.clock()
+#for i in range(5):
+#     get = create_inception_embedding(val_names[0:40])
+#     print(get.shape)
+# print(time.clock() - start)
 # files_path = get_image_file_names("/Users/zhangqinyuan/Downloads/images/")[0:3]
 # print(get.shape)
