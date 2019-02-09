@@ -3,14 +3,23 @@ import cv2
 import tensorflow as tf
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
 import numpy as np
+from keras.backend.tensorflow_backend import set_session
 
 from Datasets import get_image_file_names
 
+config = tf.ConfigProto(
+     gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
+     # device_count = {'GPU': 1}
+)
+config.gpu_options.allow_growth = True
+session = tf.Session(config=config)
+set_session(session)
+
 # Load weighs
 inception = InceptionResNetV2(weights=None, include_top=True)
-inception.load_weights('inception_resnet_v2_weights_tf_dim_ordering_tf_kernels.h5')
+inception.load_weights('./Models/inception_resnet_v2_weights_tf_dim_ordering_tf_kernels.h5')
 inception.graph = tf.get_default_graph()
-
+print("Resnet Weight loaded")
 
 # Create embedding
 def create_inception_embedding(paths):
@@ -27,7 +36,7 @@ def create_inception_embedding(paths):
     # Read all images' and convert to Lab mode
     for path in paths:
         # Print path to debug
-        print(path)
+        # print(path)
 
         # Read image first
         img = cv2.imread(path)
@@ -51,6 +60,6 @@ def create_inception_embedding(paths):
     return embed
 
 
-get = create_inception_embedding(get_image_file_names("/Users/zhangqinyuan/Downloads/images/")[0:3])
+# get = create_inception_embedding(get_image_file_names("/media/tony/MyFiles/data_256")[0:3])
 # files_path = get_image_file_names("/Users/zhangqinyuan/Downloads/images/")[0:3]
-print(get.shape)
+# print(get.shape)

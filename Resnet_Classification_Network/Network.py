@@ -1,6 +1,7 @@
 # import the modules we need
 import os
 
+import keras
 import numpy as np
 import random
 
@@ -31,28 +32,28 @@ set_session(session)
 embed_input = Input(shape=(1000,))
 # Encoder
 encoder_input = Input(shape=(256, 256, 1,))
-encoder_output = Conv2D(64, (3,3), activation='relu', padding='same', strides=2)(encoder_input)
-encoder_output = Conv2D(128, (3,3), activation='relu', padding='same')(encoder_output)
-encoder_output = Conv2D(128, (3,3), activation='relu', padding='same', strides=2)(encoder_output)
-encoder_output = Conv2D(256, (3,3), activation='relu', padding='same')(encoder_output)
-encoder_output = Conv2D(256, (3,3), activation='relu', padding='same', strides=2)(encoder_output)
-encoder_output = Conv2D(512, (3,3), activation='relu', padding='same')(encoder_output)
-encoder_output = Conv2D(512, (3,3), activation='relu', padding='same')(encoder_output)
-encoder_output = Conv2D(256, (3,3), activation='relu', padding='same')(encoder_output)
+encoder_output = Conv2D(64, (3, 3), activation='relu', padding='same', strides=2)(encoder_input)
+encoder_output = Conv2D(128, (3, 3), activation='relu', padding='same')(encoder_output)
+encoder_output = Conv2D(128, (3, 3), activation='relu', padding='same', strides=2)(encoder_output)
+encoder_output = Conv2D(256, (3, 3), activation='relu', padding='same')(encoder_output)
+encoder_output = Conv2D(256, (3, 3), activation='relu', padding='same', strides=2)(encoder_output)
+encoder_output = Conv2D(512, (3, 3), activation='relu', padding='same')(encoder_output)
+encoder_output = Conv2D(512, (3, 3), activation='relu', padding='same')(encoder_output)
+encoder_output = Conv2D(256, (3, 3), activation='relu', padding='same')(encoder_output)
 # Fusion
 fusion_output = RepeatVector(32 * 32)(embed_input)
 fusion_output = Reshape(([32, 32, 1000]))(fusion_output)
 fusion_output = concatenate([encoder_output, fusion_output], axis=3)
 fusion_output = Conv2D(256, (1, 1), activation='relu', padding='same')(fusion_output)
 # Decoder
-decoder_output = Conv2D(128, (3,3), activation='relu', padding='same')(fusion_output)
+decoder_output = Conv2D(128, (3, 3), activation='relu', padding='same')(fusion_output)
 decoder_output = UpSampling2D((2, 2))(decoder_output)
-decoder_output = Conv2D(64, (3,3), activation='relu', padding='same')(decoder_output)
+decoder_output = Conv2D(64, (3, 3), activation='relu', padding='same')(decoder_output)
 decoder_output = UpSampling2D((2, 2))(decoder_output)
-decoder_output = Conv2D(32, (3,3), activation='relu', padding='same')(decoder_output)
-decoder_output = Conv2D(16, (3,3), activation='relu', padding='same')(decoder_output)
+decoder_output = Conv2D(32, (3, 3), activation='relu', padding='same')(decoder_output)
+decoder_output = UpSampling2D((2, 2))(decoder_output)
+decoder_output = Conv2D(16, (3, 3), activation='relu', padding='same')(decoder_output)
 decoder_output = Conv2D(2, (3, 3), activation='tanh', padding='same')(decoder_output)
-decoder_output = UpSampling2D((2, 2))(decoder_output)
 model = Model(inputs=[encoder_input, embed_input], outputs=decoder_output)
 
 
@@ -104,6 +105,7 @@ if os.path.exists("./Models/weights-original-network-01-0.44.hdf5"):
 
 # Start trainning
 model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
+keras.backend.get_session().run(tf.global_variables_initializer())
 history = model.fit_generator(
     generator=get_train_batch(get_image_file_names(Trainning_dir), Batch_size, img_W, img_H),
     epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1,
