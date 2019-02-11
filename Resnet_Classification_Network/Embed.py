@@ -3,7 +3,7 @@ import time
 
 import cv2
 import tensorflow as tf
-from keras.applications.inception_resnet_v2 import InceptionResNetV2
+from keras.applications.inception_resnet_v2 import InceptionResNetV2, decode_predictions, preprocess_input
 import numpy as np
 from keras.backend.tensorflow_backend import set_session
 
@@ -35,10 +35,10 @@ def create_inception_embedding(paths):
     resnet_cols = 299
     imgs_class = []
 
-    # Read all images' and convert to Lab mode
+    # Read all images' and convert to gray-scale images
     for path in paths:
         # Print path to debug
-        # print(path)
+        print(path)
 
         # Read image first
         img = cv2.imread(path)
@@ -48,11 +48,14 @@ def create_inception_embedding(paths):
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         gray_img_inRGB = cv2.cvtColor(gray_img, cv2.COLOR_GRAY2BGR)
 
+        # Pre-process input
+        gray_img_inRGB = preprocess_input(gray_img_inRGB)
+
         # Add to the imgs_class
         imgs_class.append(gray_img_inRGB)
 
     # Make those to array
-    imgs_class = np.array(imgs_class)
+    imgs_class = np.array(imgs_class, dtype=float)
 
     # Predict the result
     with inception.graph.as_default():
@@ -63,10 +66,17 @@ def create_inception_embedding(paths):
 
 
 # val_names = get_image_file_names("/media/tony/MyFiles/data_256")
+# get = create_inception_embedding(val_names[600:601])
+# label = decode_predictions(get)
+# label = label[0][0]
+# print('%s (%.2f%%)' % (label[1], label[2]*100))
+
+
 # start = time.clock()
 #for i in range(5):
 #     get = create_inception_embedding(val_names[0:40])
 #     print(get.shape)
 # print(time.clock() - start)
-# files_path = get_image_file_names("/Users/zhangqinyuan/Downloads/images/")[0:3]
 # print(get.shape)
+
+

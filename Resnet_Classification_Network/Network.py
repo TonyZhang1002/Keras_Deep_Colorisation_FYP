@@ -83,18 +83,18 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
 
 
 # Trainning parameters
-Batch_size = 40
+Batch_size = 50
 img_W = 256
 img_H = 256
-Epochs = 6
-Steps_per_epoch = 45086
-Val_Steps_per_epoch = 912
-EarlyStopping_patience = 3
+Epochs = 100
+Steps_per_epoch = 3650
+Val_Steps_per_epoch = 73
+EarlyStopping_patience = 5
 Trainning_dir = "/media/tony/MyFiles/data_256"
 Validation_dir = "/media/tony/MyFiles/val_256"
-Models_filepath = "./Models/weights-original-network-{epoch:02d}-{val_acc:.2f}.hdf5"
+Models_filepath = "./Models/weights-resnet-network-{epoch:02d}-{val_acc:.2f}.hdf5"
 Trainning_file_names = get_image_file_names(Trainning_dir)
-Validation_file_names = get_image_file_names(Validation_dir)
+Validation_file_names = get_image_file_names(Validation_dir, 3650)
 
 # Set the early stopping
 early_stopping = EarlyStopping(monitor='val_acc', patience=EarlyStopping_patience, mode='auto')
@@ -103,8 +103,8 @@ early_stopping = EarlyStopping(monitor='val_acc', patience=EarlyStopping_patienc
 checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save_best_only=True)
 
 # Check if have any previous weight
-if os.path.exists("./Models/weights-original-network-01-0.44.hdf5"):
-    model.load_weights("./Models/weights-original-network-01-0.44.hdf5")
+if os.path.exists("./Models/weights-resnet-network-01-0.44.hdf5"):
+    model.load_weights("./Models/weights-resnet-network-01-0.44.hdf5")
     print("Check point loaded!")
 
 # Start trainning
