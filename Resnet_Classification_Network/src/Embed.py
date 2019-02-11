@@ -37,7 +37,7 @@ def create_inception_embedding(paths):
     # Read all images' and convert to gray-scale images
     for path in paths:
         # Print path to debug
-        print(path)
+        # print(path)
 
         # Read image first
         img = cv2.imread(path)
@@ -64,11 +64,11 @@ def create_inception_embedding(paths):
     return embed
 
 
-val_names = get_image_file_names("/media/tony/MyFiles/data_256")
-get = create_inception_embedding(val_names[600:601])
-label = decode_predictions(get)
-label = label[0][0]
-print('%s (%.2f%%)' % (label[1], label[2]*100))
+# val_names = get_image_file_names("/media/tony/MyFiles/data_256")
+# get = create_inception_embedding(val_names[600:601])
+# label = decode_predictions(get)
+# label = label[0][0]
+# print('%s (%.2f%%)' % (label[1], label[2]*100))
 
 
 # start = time.clock()
