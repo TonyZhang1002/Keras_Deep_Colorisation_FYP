@@ -2,21 +2,15 @@
 import cv2
 import keras
 import numpy as np
-import random
 
-from keras import Input, Model
 from keras.engine.saving import load_model
-from keras.layers import UpSampling2D
-from keras.layers.convolutional import Conv2D
-from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.backend.tensorflow_backend import set_session
 import tensorflow as tf
-from keras_preprocessing.image import ImageDataGenerator
 
-from Datasets import get_image_file_names, get_im_cv2
+from src.Datasets import get_image_file_names, get_im_cv2
 
 # For tensonflow-gpu
-from Embed import create_inception_embedding
+from src.Embed import create_inception_embedding
 
 config = tf.ConfigProto(
     gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)

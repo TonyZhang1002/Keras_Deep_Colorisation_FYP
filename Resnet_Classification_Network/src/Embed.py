@@ -1,13 +1,12 @@
 # Load weights
-import time
 
 import cv2
 import tensorflow as tf
-from keras.applications.inception_resnet_v2 import InceptionResNetV2, decode_predictions, preprocess_input
+from keras.applications.inception_resnet_v2 import InceptionResNetV2, preprocess_input, decode_predictions
 import numpy as np
 from keras.backend.tensorflow_backend import set_session
 
-from Datasets import get_image_file_names
+from src.Datasets import get_image_file_names
 
 config = tf.ConfigProto(
      gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
@@ -65,11 +64,11 @@ def create_inception_embedding(paths):
     return embed
 
 
-# val_names = get_image_file_names("/media/tony/MyFiles/data_256")
-# get = create_inception_embedding(val_names[600:601])
-# label = decode_predictions(get)
-# label = label[0][0]
-# print('%s (%.2f%%)' % (label[1], label[2]*100))
+val_names = get_image_file_names("/media/tony/MyFiles/data_256")
+get = create_inception_embedding(val_names[600:601])
+label = decode_predictions(get)
+label = label[0][0]
+print('%s (%.2f%%)' % (label[1], label[2]*100))
 
 
 # start = time.clock()
