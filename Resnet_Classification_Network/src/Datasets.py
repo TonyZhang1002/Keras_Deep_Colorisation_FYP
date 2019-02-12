@@ -75,7 +75,7 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True, pre_proc
 
 # get = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:2], 256, 256, 3, pre_processing=False)
 # print(get.shape)
-# print(get[1, 211, 125, 2])
+# print(get[1, 120:124, 120:124, 1])
 
 # files_path = get_image_file_names("/media/tony/MyFiles/val_256", 3650)
 # print(len(files_path))

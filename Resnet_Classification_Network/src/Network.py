@@ -1,23 +1,22 @@
 # import the modules we need
+import cv2
 import os
 
 import keras
 
 from keras import Input, Model
+from keras.applications.inception_resnet_v2 import InceptionResNetV2, preprocess_input, decode_predictions
 from keras.layers import UpSampling2D, RepeatVector, Reshape, concatenate
 from keras.layers.convolutional import Conv2D
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.backend.tensorflow_backend import set_session
 import tensorflow as tf
+import numpy as np
 
 from src.Datasets import get_image_file_names, get_im_cv2
-
-
-
-# For tensonflow-gpu
-from src.Embed import create_inception_embedding
 from src.Plot import training_vis
 
+# For tensonflow-gpu
 config = tf.ConfigProto(
      gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
      # device_count = {'GPU': 1}
@@ -25,6 +24,12 @@ config = tf.ConfigProto(
 config.gpu_options.allow_growth = True
 session = tf.Session(config=config)
 set_session(session)
+
+# Load weighs
+inception = InceptionResNetV2(weights=None, include_top=True)
+inception.load_weights('./Models/inception_resnet_v2_weights_tf_dim_ordering_tf_kernels.h5')
+inception.graph = tf.get_default_graph()
+print("Resnet Weight loaded")
 
 # Define the embed input shape
 embed_input = Input(shape=(1000,))
@@ -55,6 +60,48 @@ decoder_output = UpSampling2D((2, 2))(decoder_output)
 model = Model(inputs=[encoder_input, embed_input], outputs=decoder_output)
 
 
+# Create embedding
+def create_embedding(paths):
+    """
+        :parameter：
+            paths：The images' root path
+        :return:
+            imgs: numpy output of their classification
+        """
+    resnet_rows = 299
+    resnet_cols = 299
+    imgs_class = []
+
+    # Read all images' and convert to gray-scale images
+    for path in paths:
+        # Print path to debug
+        # print(path)
+
+        # Read image first
+        img = cv2.imread(path)
+        img = cv2.resize(img, (resnet_cols, resnet_rows))
+
+        # Switch to lab color space
+        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray_img_inRGB = cv2.cvtColor(gray_img, cv2.COLOR_GRAY2BGR)
+
+        # Pre-process input
+        gray_img_inRGB = preprocess_input(gray_img_inRGB)
+
+        # Add to the imgs_class
+        imgs_class.append(gray_img_inRGB)
+
+    # Make those to array
+    imgs_class = np.array(imgs_class, dtype=float)
+
+    # Predict the result
+    with inception.graph.as_default():
+        embed = inception.predict(imgs_class)
+
+    # Return the embedding
+    return embed
+
+
 # Generate training data
 def get_train_batch(X_train, batch_size, img_w, img_h):
     """
@@ -69,8 +116,8 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
     """
     while 1:
         for i in range(0, len(X_train), batch_size):
-            images_input = get_im_cv2(X_train[i:i + batch_size], img_w, img_h, 3)
-            embed_input_batch = create_inception_embedding(X_train[i:i + batch_size])
+            images_input = get_im_cv2(X_train[i:i + batch_size], img_w, img_h, 3, pre_processing=False)
+            embed_input_batch = create_embedding(X_train[i:i + batch_size])
             x = images_input[:, :, :, 0]
             # Reshape the x
             x = x.reshape(x.shape + (1,))
@@ -80,7 +127,7 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
 
 
 # Trainning parameters
-Batch_size = 50
+Batch_size = 25
 img_W = 256
 img_H = 256
 Epochs = 100
@@ -106,7 +153,7 @@ if os.path.exists("./Models/weights-resnet-network-01-0.44.hdf5"):
 
 # Start trainning
 model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
-keras.backend.get_session().run(tf.global_variables_initializer())
+# keras.backend.get_session().run(tf.global_variables_initializer())
 history = model.fit_generator(
     generator=get_train_batch(Trainning_file_names, Batch_size, img_W, img_H),
     epochs=Epochs, steps_per_epoch=Steps_per_epoch, verbose=1,
