@@ -49,9 +49,9 @@ decoder_output = UpSampling2D((2, 2))(decoder_output)
 decoder_output = Conv2D(64, (3, 3), activation='relu', padding='same')(decoder_output)
 decoder_output = UpSampling2D((2, 2))(decoder_output)
 decoder_output = Conv2D(32, (3, 3), activation='relu', padding='same')(decoder_output)
-decoder_output = UpSampling2D((2, 2))(decoder_output)
 decoder_output = Conv2D(16, (3, 3), activation='relu', padding='same')(decoder_output)
 decoder_output = Conv2D(2, (3, 3), activation='tanh', padding='same')(decoder_output)
+decoder_output = UpSampling2D((2, 2))(decoder_output)
 model = Model(inputs=[encoder_input, embed_input], outputs=decoder_output)
 
 
@@ -70,13 +70,13 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
     while 1:
         for i in range(0, len(X_train), batch_size):
             images_input = get_im_cv2(X_train[i:i + batch_size], img_w, img_h, 3)
-            embed_input = create_inception_embedding(X_train[i:i + batch_size])
+            embed_input_batch = create_inception_embedding(X_train[i:i + batch_size])
             x = images_input[:, :, :, 0]
             # Reshape the x
             x = x.reshape(x.shape + (1,))
             y = images_input[:, :, :, 1:]
             # Keep running to feed images
-            yield ([x, embed_input], y)
+            yield ([x, embed_input_batch], y)
 
 
 # Trainning parameters

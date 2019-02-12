@@ -21,7 +21,7 @@ session = tf.Session(config=config)
 set_session(session)
 
 # Load the model
-model = load_model('./Models/weights-original-network-06-0.57.hdf5')
+model = load_model('./Models/weights-resnet-network-06-0.57.hdf5')
 
 # Test parameters
 Testing_dir = "/media/tony/MyFiles/test_256"
@@ -31,9 +31,9 @@ img_H = 256
 
 
 def test_images():
-    color_me = get_im_cv2(Testing_file_names[2:3], img_W, img_H, 1, pre_processing=False)
+    color_me = get_im_cv2(Testing_file_names[3:4], img_W, img_H, 1, pre_processing=False)
     keras.backend.get_session().run(tf.global_variables_initializer())
-    color_me_embed = create_inception_embedding(Testing_file_names[2:3])
+    color_me_embed = create_inception_embedding(Testing_file_names[3:4])
     output = model.predict([color_me, color_me_embed])
     print(output[0, 124, 125, 0])
     # Combine output and input to lab images
