@@ -4,6 +4,7 @@ import time
 
 import numpy as np
 import cv2
+from keras.applications.inception_resnet_v2 import InceptionResNetV2, preprocess_input
 
 
 def get_image_file_names(root_paths, files_inDir=500):
@@ -43,16 +44,7 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True, pre_proc
         # Pre-processing
         pre_processed = img
         if pre_processing:
-            M1 = cv2.getRotationMatrix2D((img_cols / 2, img_rows / 2), 90, 1)
-            M2 = cv2.getRotationMatrix2D((img_cols / 2, img_rows / 2), 180, 1)
-            pre_processing_flag = random.randint(0, 3)
-            if pre_processing_flag == 1:
-                pre_processed = cv2.warpAffine(img, M1, (img_cols, img_rows))
-            elif pre_processing_flag == 2:
-                pre_processed = cv2.warpAffine(img, M2, (img_cols, img_rows))
-            elif pre_processing_flag == 3:
-                pre_processed = cv2.flip(img, -1)
-
+            pre_processed = preprocess_input(pre_processed)
 
         # Switch to lab color space
         lab_img = cv2.cvtColor(pre_processed, cv2.COLOR_BGR2LAB)
@@ -60,7 +52,7 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True, pre_proc
         # Reduce size
         if normalize:
             lab_img = lab_img.astype('float32')
-            lab_img /= 256
+            lab_img /= 128
 
         # Judge different output requirements
         if color_type == 1:
@@ -73,9 +65,12 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True, pre_proc
     return np.array(imgs).reshape(len(paths), img_rows, img_cols, color_type)
 
 
-# get = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:2], 256, 256, 3, pre_processing=False)
+get = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:2], 256, 256, 3, normalize=False, pre_processing=True)
+get2 = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:2], 256, 256, 1, normalize=False, pre_processing=True)
 # print(get.shape)
-# print(get[1, 120:124, 120:124, 1])
+print(get[1, 250:255, 250:255, 0])
+print(get2[1, 250:255, 250:255, 0])
+print(get[1, 250:255, 250:255, 1])
 
 # files_path = get_image_file_names("/media/tony/MyFiles/val_256", 3650)
 # print(len(files_path))

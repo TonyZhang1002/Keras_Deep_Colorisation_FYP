@@ -116,24 +116,25 @@ def get_train_batch(X_train, batch_size, img_w, img_h):
     """
     while 1:
         for i in range(0, len(X_train), batch_size):
-            images_input = get_im_cv2(X_train[i:i + batch_size], img_w, img_h, 3, pre_processing=False)
+            images_input = get_im_cv2(X_train[i:i + batch_size], img_w, img_h, 3,
+                                      normalize=False, pre_processing=True)
             embed_input_batch = create_embedding(X_train[i:i + batch_size])
             x = images_input[:, :, :, 0]
             # Reshape the x
             x = x.reshape(x.shape + (1,))
-            y = images_input[:, :, :, 1:]
+            y = images_input[:, :, :, 1:] / 128
             # Keep running to feed images
             yield ([x, embed_input_batch], y)
 
 
 # Trainning parameters
-Batch_size = 25
+Batch_size = 50
 img_W = 256
 img_H = 256
 Epochs = 100
 Steps_per_epoch = 3650
 Val_Steps_per_epoch = 73
-EarlyStopping_patience = 5
+EarlyStopping_patience = 10
 Trainning_dir = "/media/tony/MyFiles/data_256"
 Validation_dir = "/media/tony/MyFiles/val_256"
 Models_filepath = "./Models/weights-resnet-network-{epoch:02d}-{val_acc:.2f}.hdf5"
@@ -144,7 +145,7 @@ Validation_file_names = get_image_file_names(Validation_dir, 3650)
 early_stopping = EarlyStopping(monitor='val_acc', patience=EarlyStopping_patience, mode='auto')
 
 # Set the checkpoint
-checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save_best_only=True)
+checkpoint = ModelCheckpoint(Models_filepath, monitor='val_acc', verbose=1, save_best_only=False)
 
 # Check if have any previous weight
 if os.path.exists("./Models/weights-resnet-network-01-0.44.hdf5"):
