@@ -4,18 +4,19 @@ import time
 
 import numpy as np
 import cv2
-from keras.applications.inception_resnet_v2 import InceptionResNetV2, preprocess_input
 
 
-def get_image_file_names(root_paths, files_inDir=500):
+def get_image_file_names(root_paths, files_inDir=150):
     # Get all images' files name
     files_path = []
-    for dirpath, dirnames, filenames in os.walk(root_paths):
-        files_num_inDir = 0
-        for file in filenames:
-            if os.path.splitext(file)[1] == '.jpg' and files_num_inDir < files_inDir:
-                files_path.append(os.path.join(dirpath, file))
-            files_num_inDir += 1
+    with open('train.flist', mode='w') as f:
+        for dirpath, dirnames, filenames in os.walk(root_paths):
+            files_num_inDir = 0
+            for file in filenames:
+                if os.path.splitext(file)[1] == '.jpeg' and files_num_inDir > files_inDir:
+                    files_path.append(os.path.join(dirpath, file))
+                    f.write(str(os.path.join(dirpath, file) + '\n'))
+                files_num_inDir += 1
     return files_path
 
 
@@ -43,8 +44,8 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True, pre_proc
 
         # Pre-processing
         pre_processed = img
-        if pre_processing:
-            pre_processed = preprocess_input(pre_processed)
+        # if pre_processing:
+            # pre_processed = preprocess_input(pre_processed)
 
         # Switch to lab color space
         lab_img = cv2.cvtColor(pre_processed, cv2.COLOR_BGR2LAB)
@@ -65,15 +66,12 @@ def get_im_cv2(paths, img_rows, img_cols, color_type=1, normalize=True, pre_proc
     return np.array(imgs).reshape(len(paths), img_rows, img_cols, color_type)
 
 
-get = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:2], 256, 256, 3, normalize=False, pre_processing=True)
-get2 = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:2], 256, 256, 1, normalize=False, pre_processing=True)
+#get = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:2], 256, 256, 3, normalize=False, pre_processing=True)
+# get2 = get_im_cv2(get_image_file_names("/media/tony/MyFiles/data_256")[0:2], 256, 256, 1, normalize=False, pre_processing=True)
 # print(get.shape)
-print(get[1, 250:255, 250:255, 0])
-print(get2[1, 250:255, 250:255, 0])
-print(get[1, 250:255, 250:255, 1])
 
-# files_path = get_image_file_names("/media/tony/MyFiles/val_256", 3650)
-# print(len(files_path))
+files_path = get_image_file_names("/media/tony/MyFiles/gan-imagenet/resized-256", 52000)
+print(len(files_path))
 
 # val_names = get_image_file_names("/media/tony/MyFiles/data_256")
 # start = time.clock()

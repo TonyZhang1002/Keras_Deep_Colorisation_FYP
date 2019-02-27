@@ -20,7 +20,7 @@ session = tf.Session(config=config)
 set_session(session)
 
 # Load the model
-model = load_model('./Models/weights-resnet-network-01-0.78.hdf5')
+model = load_model('./Models/weights-resnet-network-02-0.78.hdf5')
 
 # Load weighs
 inception = InceptionResNetV2(weights=None, include_top=True)
@@ -87,13 +87,13 @@ def test_images():
     output = model.predict([color_me, color_me_embed])
     print(output[0, 250:255, 250:255, 0])
     # Combine output and input to lab images
-    for i in range(len(output)):
-        combine = np.zeros((img_W, img_H, 3))
-        combine[:, :, 0] = color_me[i][:, :, 0]
-        combine[:, :, 1:] = output[i]
-        # combine *= 128
-        combine_copy = np.uint8(combine)
-        cv2.imwrite('Test_image.jpg', cv2.cvtColor(combine_copy, cv2.COLOR_LAB2BGR))
+    # for i in range(len(output)):
+    #    combine = np.zeros((img_W, img_H, 3))
+    #    combine[:, :, 0] = color_me[i][:, :, 0]
+    #    combine[:, :, 1:] = output[i]
+    #    # combine *= 128
+    #    combine_copy = np.uint8(combine)
+    #    cv2.imwrite('Test_image.jpg', cv2.cvtColor(combine_copy, cv2.COLOR_LAB2BGR))
 
 
 test_images();
